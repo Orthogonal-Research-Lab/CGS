@@ -22,7 +22,11 @@ class graphics_factory(object):
         
         lamp = graphics_factory.create_lamp("Lampika",shape)
         cam = graphics_factory.create_camera("Kamerka",shape)
-        kernel = graphics_factory.create_kernel("kernel",2.0,shape)
+        if(shape=="Square"):
+            radius = 2.0
+        else:
+            radius = 0.7
+        kernel = graphics_factory.create_kernel("kernel",0.7,shape)
         for i in range(0,num_of_cultures):
             culture_list.append(graphics_factory.create_culture("culture_{}".format(i),(0,0,0),shape))
         graphics_factory.create_text(shape)
