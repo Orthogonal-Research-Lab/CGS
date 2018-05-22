@@ -1,4 +1,4 @@
-mport bpy
+import bpy
 from random import random, uniform,randint
 import mathutils
 from mathutils import Vector
