@@ -3,6 +3,7 @@ from random import random, uniform,randint
 import mathutils
 from mathutils import Vector
 import math
+import sys
 import time
         
 class graphics_factory(object):
@@ -225,7 +226,10 @@ def clear_heirarchy():
             bpy.data.images.remove(block)
 
 if __name__=="__main__":
+
+    end_scene = int(sys.argv[-1])
     
+    script_start = time.time()
     clear_screen()
     clear_heirarchy()
     scene = bpy.context.scene
@@ -249,10 +253,12 @@ if __name__=="__main__":
             positions.append(get_triangle_constraints(
                 [(0,0,0),(5,0,0),(2.5,5,0)]))
 
+    scene.frame_start = 0
+    scene.frame_end = end_scene
+
     number_of_frame = 0  
-    t_end = time.time()+15
     # makes cultures move around
-    while time.time() < t_end:
+    while time.time() < scene.frame_end:
         
         scene.frame_set(number_of_frame)
         
@@ -263,3 +269,4 @@ if __name__=="__main__":
         # move next 10 frames forward - Blender will figure out what to do between this time
         number_of_frame += 10
 
+    print("script finished in {} seconds".format(time.time() - script_start))
