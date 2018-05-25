@@ -5,7 +5,6 @@ from mathutils import Vector
 import math
 import sys
 import time
-import os
         
 class graphics_factory(object):
     
