@@ -1,0 +1,5 @@
+250 //frames
+2 // number of cultures
+3 // number of tuples
+// text tuples should say
+

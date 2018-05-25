@@ -5,6 +5,7 @@ from mathutils import Vector
 import math
 import sys
 import time
+import os
         
 class graphics_factory(object):
     
@@ -89,7 +90,6 @@ class graphics_factory(object):
     def create_kernel(name,radius,shape):
         origin = (0,0,0)
         if(shape=="Rectangle"):
-            print("here")
             make_rectangle(radius,origin)
             kernel = bpy.context.object
             kernel.scale = (0.33, 3, 0)
@@ -227,15 +227,29 @@ def clear_heirarchy():
 
 if __name__=="__main__":
 
-    end_scene = int(sys.argv[-1])
     
     script_start = time.time()
     clear_screen()
     clear_heirarchy()
     scene = bpy.context.scene
-    # change this to see 3 or 2 tuple demo
-    tuples = 4
-    cultures = 3
+
+
+    f = open("input.txt","r")
+    num_frames = f.readline()
+    num_tuples = f.readline()
+    num_cultures = f.readline()
+
+    # possible add in 
+    # all_tuple_names = f.readline
+    # list_of_names = all_tuple_names.split()
+    
+
+    tuples = int(num_tuples.split(' ', 1)[0])
+    cultures = int(num_cultures.split(' ', 1)[0])
+    scene.frame_start = 0
+    scene.frame_end = int(num_frames.split(' ', 1)[0])
+    print(scene.frame_end)
+
     lamp, cam, kernel, culture_list = graphics_factory.create(tuples,cultures)
     
     positions = []
@@ -253,12 +267,10 @@ if __name__=="__main__":
             positions.append(get_triangle_constraints(
                 [(0,0,0),(5,0,0),(2.5,5,0)]))
 
-    scene.frame_start = 0
-    scene.frame_end = end_scene
 
     number_of_frame = 0  
     # makes cultures move around
-    while time.time() < scene.frame_end:
+    while number_of_frame < scene.frame_end:
         
         scene.frame_set(number_of_frame)
         
@@ -269,4 +281,6 @@ if __name__=="__main__":
         # move next 10 frames forward - Blender will figure out what to do between this time
         number_of_frame += 10
 
+
+    # bpy.ops.wm.save_as_mainfile(filepath = '~/Documents/CGS/oop-blender-demo.blend')
     print("script finished in {} seconds".format(time.time() - script_start))
