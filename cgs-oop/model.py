@@ -224,14 +224,7 @@ def clear_heirarchy():
         if block.users == 0:
             bpy.data.images.remove(block)
 
-if __name__=="__main__":
-
-    
-    script_start = time.time()
-    clear_screen()
-    clear_heirarchy()
-    scene = bpy.context.scene
-
+def parse_file():
 
     f = open("input.txt","r")
     num_frames = f.readline()
@@ -241,13 +234,31 @@ if __name__=="__main__":
     # possible add in 
     # all_tuple_names = f.readline
     # list_of_names = all_tuple_names.split()
+
+    f.close()
+
+    return num_frames, num_tuples, num_cultures
+
     
+
+if __name__=="__main__":
+
+    
+    script_start = time.time()
+    clear_screen()
+    clear_heirarchy()
+    scene = bpy.context.scene
+
+    num_frames, num_tuples, num_cultures = parse_file()
+
 
     tuples = int(num_tuples.split(' ', 1)[0])
     cultures = int(num_cultures.split(' ', 1)[0])
     scene.frame_start = 0
-    scene.frame_end = int(num_frames.split(' ', 1)[0])
-    print(scene.frame_end)
+    year = int(num_frames.split(' ', 1)[0])
+    rounded_year = year - (year % 20)
+    scene.frame_end = rounded_year/20 + 5
+    
 
     lamp, cam, kernel, culture_list = graphics_factory.create(tuples,cultures)
     
@@ -278,8 +289,7 @@ if __name__=="__main__":
             culture.keyframe_insert(data_path="location")
 
         # move next 10 frames forward - Blender will figure out what to do between this time
-        number_of_frame += 10
-
+        number_of_frame += 1
 
     # bpy.ops.wm.save_as_mainfile(filepath = '~/Documents/CGS/oop-blender-demo.blend')
     print("script finished in {} seconds".format(time.time() - script_start))
