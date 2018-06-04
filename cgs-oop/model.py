@@ -20,14 +20,16 @@ class graphics_factory(object):
             shape = "Triangle"
         elif(tuples == 4):
             shape = "Square"
-        
+        elif(tuples == 8):
+            shape = "Cube"
+
         lamp = graphics_factory.create_lamp("Lampika",shape)
         cam = graphics_factory.create_camera("Kamerka",shape)
-        if(shape=="Square"):
+        if(shape=="Square" or shape=="Cube"):
             radius = 2.0
         else:
             radius = 0.7
-        kernel = graphics_factory.create_kernel("kernel",0.7,shape)
+        kernel = graphics_factory.create_kernel("kernel",radius,shape)
         for i in range(0,num_of_cultures):
             culture_list.append(graphics_factory.create_culture("culture_{}".format(i),(0,0,0),shape))
         graphics_factory.create_text(shape)
@@ -40,7 +42,7 @@ class graphics_factory(object):
         
         if(shape=="Rectangle"):
             make_rectangle(0.2,origin)
-        elif(shape=="Triangle" or shape=="Square"):
+        else:
             make_circle(0.2,origin)
      
         culture = bpy.context.object
@@ -72,6 +74,9 @@ class graphics_factory(object):
             cam_ob.location = (0,0,3.5)
         elif(shape=="Triangle"):
             cam_ob.location = (2,3,4.5)
+        elif(shape=="Cube"):
+            cam_ob.location = (1,-2,3)
+            cam_ob.rotation_euler = (math.radians(45), 0.0, math.radians(30))
 
         return cam_ob
     @staticmethod
@@ -83,6 +88,8 @@ class graphics_factory(object):
             lamp.location = (1,0,4.5)
         elif(shape=="Triangle"):
             lamp.location = (4,5,4.5)
+        elif(shape=="Cube"):
+            lamp.location = (6,6,6)
         return lamp
 
     @staticmethod
@@ -97,6 +104,10 @@ class graphics_factory(object):
         elif(shape=="Square"):
             kernel = make_square(radius,origin)
             kernel = bpy.context.object
+        elif(shape=="Cube"):
+            print("here")
+            kernel = make_cube(radius,origin)
+            kernel = bpy.context.object
             
 
         kernel.name = name
@@ -105,8 +116,12 @@ class graphics_factory(object):
         data.name = name+'Mesh'
         mat = bpy.data.materials.new("kernel_color")
         mat.diffuse_color = (1,1,1)
+        if(shape=="Cube"):
+            mat.diffuse_color = (1,0,0)
+            mat.use_transparency = True
+            mat.transparency_method = 'Z_TRANSPARENCY'
+            mat.alpha = 0.1
         kernel.active_material = mat
-
         
         return kernel
     
@@ -148,7 +163,23 @@ class graphics_factory(object):
             bpy.ops.object.text_add(location=(1.5,2.3,0))
             ob = bpy.context.object
             ob.data.body = "holder"
-                        
+        elif(shape=="Cube"):
+            bpy.ops.object.text_add(location = (-2.5,2.3,0))
+            ob = bpy.context.object
+            ob.data.body = "holder"
+            
+            bpy.ops.object.text_add(location=(-2.5,-3,0))
+            ob = bpy.context.object
+            ob.data.body = "holder"
+
+            bpy.ops.object.text_add(location=(1.5,-3,0))
+            ob = bpy.context.object
+            ob.data.body = "holder"
+            
+            bpy.ops.object.text_add(location=(1.5,2.3,0))
+            ob = bpy.context.object
+            ob.data.body = "holder"
+            
 def make_rectangle(radius,origin):
         bpy.ops.mesh.primitive_plane_add(
         radius = radius,
@@ -183,6 +214,9 @@ def make_triangle(origin):
     my_mesh.update(calc_edges=True)
     
     return ob
+
+def make_cube(radius,origin):
+    bpy.ops.mesh.primitive_cube_add(location=origin)
 
 def get_slope(vertex1,vertex2):
     return (vertex2[1]-vertex1[1])/(vertex2[0]-vertex1[0])
@@ -224,22 +258,19 @@ def clear_heirarchy():
         if block.users == 0:
             bpy.data.images.remove(block)
 
-def parse_file():
 
+def parse_file():   
     f = open("input.txt","r")
     num_frames = f.readline()
     num_tuples = f.readline()
     num_cultures = f.readline()
-
+    
     # possible add in 
     # all_tuple_names = f.readline
     # list_of_names = all_tuple_names.split()
-
-    f.close()
-
-    return num_frames, num_tuples, num_cultures
-
     
+    f.close()
+    return num_frames, num_tuples, num_cultures
 
 if __name__=="__main__":
 
@@ -248,17 +279,15 @@ if __name__=="__main__":
     clear_screen()
     clear_heirarchy()
     scene = bpy.context.scene
-
     num_frames, num_tuples, num_cultures = parse_file()
 
 
     tuples = int(num_tuples.split(' ', 1)[0])
     cultures = int(num_cultures.split(' ', 1)[0])
     scene.frame_start = 0
-    year = int(num_frames.split(' ', 1)[0])
-    rounded_year = year - (year % 20)
-    scene.frame_end = rounded_year/20 + 5
-    
+    years = int(num_frames.split(' ', 1)[0])
+    rounded_year = years - (years % 20)
+    scene.frame_end = (rounded_year/20) +5
 
     lamp, cam, kernel, culture_list = graphics_factory.create(tuples,cultures)
     
@@ -273,6 +302,11 @@ if __name__=="__main__":
             x = uniform(-2.0,2.0)
             y = uniform(-2.0,2.0)
             positions.append((x,y,0))
+        elif(tuples ==8):
+            x = uniform(-0.7,0.7)
+            y = uniform(-0.7,0.7)
+            z = uniform(-0.7,-0.7)
+            positions.append((x,y,z))
         else:
             positions.append(get_triangle_constraints(
                 [(0,0,0),(5,0,0),(2.5,5,0)]))
@@ -283,13 +317,15 @@ if __name__=="__main__":
     while number_of_frame < scene.frame_end:
         
         scene.frame_set(number_of_frame)
-        
+        if(tuples==8):
+            kernel.active_material.keyframe_insert(data_path="alpha")
         for culture in culture_list:
             culture.location = positions[randint(0,100)]
             culture.keyframe_insert(data_path="location")
 
         # move next 10 frames forward - Blender will figure out what to do between this time
         number_of_frame += 1
+
 
     # bpy.ops.wm.save_as_mainfile(filepath = '~/Documents/CGS/oop-blender-demo.blend')
     print("script finished in {} seconds".format(time.time() - script_start))
