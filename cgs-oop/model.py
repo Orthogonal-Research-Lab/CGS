@@ -11,7 +11,7 @@ class graphics_factory(object):
     # this method creates everything to be displayed
     # meant as abstraction layer between user and creation of objects
     @staticmethod
-    def create(tuples,num_of_cultures):
+    def create(tuples,num_of_cultures,tuple_names):
         culture_list=[]
         
         if(tuples == 2):
@@ -32,7 +32,7 @@ class graphics_factory(object):
         kernel = graphics_factory.create_kernel("kernel",radius,shape)
         for i in range(0,num_of_cultures):
             culture_list.append(graphics_factory.create_culture("culture_{}".format(i),(0,0,0),shape))
-        graphics_factory.create_text(shape)
+        graphics_factory.create_text(shape,tuple_names)
         
         return lamp,cam,kernel,culture_list
         
@@ -126,43 +126,52 @@ class graphics_factory(object):
         return kernel
     
     @staticmethod
-    def create_text(shape):
+    def create_text(shape,names=None):
         if(shape=="Rectangle"):
             bpy.ops.object.text_add(location=(-1,2.3,0))
             ob = bpy.context.object
-            ob.data.body = "hot"
+            if(names != None):
+                ob.data.body = names[0]
         
             bpy.ops.object.text_add(location=(-1,-3,0))
             ob = bpy.context.object
-            ob.data.body = "cold"
+            if(names != None):
+                ob.data.body = names[1]
         elif(shape=="Triangle"):
             bpy.ops.object.text_add(location=(0,-1,0))
             ob = bpy.context.object
-            ob.data.body = "cold"
+            if(names != None):
+                ob.data.body = names[0]
             
             bpy.ops.object.text_add(location = (2.5,5,0))
             ob = bpy.context.object
-            ob.data.body = "hot"
+            if(names != None):
+                ob.data.body = names[1]
             
             bpy.ops.object.text_add(location = (5,-1,0))
             ob = bpy.context.object
-            ob.data.body = "tbd"
+            if(names != None):
+                ob.data.body = names[2]
         elif(shape=="Square"):
             bpy.ops.object.text_add(location = (-2.5,2.3,0))
             ob = bpy.context.object
-            ob.data.body = "holder"
+            if(names != None):
+                ob.data.body = names[0]
             
             bpy.ops.object.text_add(location=(-2.5,-3,0))
             ob = bpy.context.object
-            ob.data.body = "holder"
+            if(names != None):
+                ob.data.body = names[1]
 
             bpy.ops.object.text_add(location=(1.5,-3,0))
             ob = bpy.context.object
-            ob.data.body = "holder"
+            if(names != None):
+                ob.data.body = names[2]
             
             bpy.ops.object.text_add(location=(1.5,2.3,0))
             ob = bpy.context.object
-            ob.data.body = "holder"
+            if(names != None):
+                ob.data.body = names[3]
         elif(shape=="Cube"):
             bpy.ops.object.text_add(location = (-2.5,2.3,0))
             ob = bpy.context.object
@@ -261,16 +270,22 @@ def clear_heirarchy():
 
 def parse_file():   
     f = open("input.txt","r")
+    
     num_frames = f.readline()
     num_tuples = f.readline()
     num_cultures = f.readline()
+    tuples_def = f.readline()
     
-    # possible add in 
-    # all_tuple_names = f.readline
-    # list_of_names = all_tuple_names.split()
+    tuple_names = [x.strip() for x in tuples_def.split(',')]
+    tuples = int(num_tuples.split(' ', 1)[0])
+    cultures = int(num_cultures.split(' ', 1)[0])
+    years = int(num_frames.split(' ', 1)[0])
+    
+    if len(tuple_names) != tuples:
+        raise ValueError("number of tuples entered do not match amount of tuples")
     
     f.close()
-    return num_frames, num_tuples, num_cultures
+    return years, tuples,cultures,tuple_names
 
 if __name__=="__main__":
 
@@ -279,17 +294,13 @@ if __name__=="__main__":
     clear_screen()
     clear_heirarchy()
     scene = bpy.context.scene
-    num_frames, num_tuples, num_cultures = parse_file()
+    years,tuples,cultures,tuple_names = parse_file()
 
-
-    tuples = int(num_tuples.split(' ', 1)[0])
-    cultures = int(num_cultures.split(' ', 1)[0])
     scene.frame_start = 0
-    years = int(num_frames.split(' ', 1)[0])
     rounded_year = years - (years % 20)
     scene.frame_end = (rounded_year/20) +5
-
-    lamp, cam, kernel, culture_list = graphics_factory.create(tuples,cultures)
+    
+    lamp, cam, kernel, culture_list = graphics_factory.create(tuples,cultures,tuple_names)
     
     positions = []
     

@@ -1,5 +1,4 @@
 250 //frames
-4 // number of tuples
+3 // number of tuples
 2 // number of cultures
-// text tuples should say
-
+hot, cold, soft
