@@ -22,12 +22,14 @@ class graphics_factory(object):
             shape = "Triangle"
         elif(tuples == 4):
             shape = "Square"
+        elif(tuples == 5):
+            shape = "Cone"
         elif(tuples == 8):
             shape = "Cube"
 
         lamp = graphics_factory.create_lamp("Lampika",shape)
         cam = graphics_factory.create_camera("Kamerka",shape)
-        if(shape=="Square" or shape=="Cube"):
+        if(shape=="Square" or shape=="Cube" or shape=="Cone"):
             radius = 2.0
         else:
             radius = 0.7
@@ -76,8 +78,11 @@ class graphics_factory(object):
             cam_ob.location = (0,0,3.5)
         elif(shape=="Triangle"):
             cam_ob.location = (2,3,4.5)
+        elif(shape=="Cone"):
+            cam_ob.location = (0,-1.5,2.8)
+            cam_ob.rotation_euler = (math.radians(30),0,math.radians(10))
         elif(shape=="Cube"):
-            cam_ob.location = (2,-4,4)
+            cam_ob.location = (2,-3.5,4)
             cam_ob.rotation_euler = (math.radians(45), 0.0, math.radians(30))
 
         return cam_ob
@@ -90,6 +95,8 @@ class graphics_factory(object):
             lamp.location = (1,0,4.5)
         elif(shape=="Triangle"):
             lamp.location = (4,5,4.5)
+        elif(shape=="Cone"):
+            lamp.location =(0,0,5)
         elif(shape=="Cube"):
             lamp.location = (6,6,6)
         return lamp
@@ -106,8 +113,11 @@ class graphics_factory(object):
         elif(shape=="Square"):
             kernel = make_square(radius,origin)
             kernel = bpy.context.object
+        elif(shape=="Cone"):
+            origin =(0,0,1)
+            kernel = make_cone(radius,origin)
+            kernel = bpy.context.object
         elif(shape=="Cube"):
-            print("here")
             kernel = make_cube(radius,origin)
             kernel = bpy.context.object
             
@@ -118,7 +128,7 @@ class graphics_factory(object):
         data.name = name+'Mesh'
         mat = bpy.data.materials.new("kernel_color")
         mat.diffuse_color = (1,1,1)
-        if(shape=="Cube"):
+        if(shape == "Cube" or shape == "Cone"):
             mat.diffuse_color = (1,0,0)
             mat.use_transparency = True
             mat.transparency_method = 'Z_TRANSPARENCY'
@@ -129,50 +139,54 @@ class graphics_factory(object):
     
     @staticmethod
     def create_text(shape,names=None):
+        mat = bpy.data.materials.new("text_color")
+        mat.diffuse_color = (0,0,0)
+        
         if(shape=="Rectangle"):
             bpy.ops.object.text_add(location=(-1,2.3,0))
             ob = bpy.context.object
-            if(names != None):
-                ob.data.body = names[0]
+            ob.data.body = names[0]
+            ob.active_material = mat
         
             bpy.ops.object.text_add(location=(-1,-3,0))
             ob = bpy.context.object
-            if(names != None):
-                ob.data.body = names[1]
+            ob.data.body = names[1]
+            ob.active_material = mat
                 
         elif(shape=="Triangle"):
             bpy.ops.object.text_add(location=(0,-1,0))
             ob = bpy.context.object
-            if(names != None):
-                ob.data.body = names[0]
+            ob.data.body = names[0]
+            ob.active_material = mat
             
             bpy.ops.object.text_add(location = (2.5,5,0))
             ob = bpy.context.object
-            if(names != None):
-                ob.data.body = names[1]
+            ob.data.body = names[1]
+            ob.active_material = mat
             
             bpy.ops.object.text_add(location = (5,-1,0))
             ob = bpy.context.object
-            if(names != None):
-                ob.data.body = names[2]
+            ob.data.body = names[2]
+            ob.active_material = mat
                 
         elif(shape=="Square"):
             vertices = [(-2.5,2.3,0),(-2.5,-3,0),(1.5,-3,0),(1.5,2.3,0)]
             
-            for i in range(0,4)
+            for i in range(0,4):
                 bpy.ops.object.text_add(location=vertices[i])
                 ob = bpy.context.object
                 ob.data.body = names[i]
+                ob.active_material = mat
                 
         elif(shape=="Cube"):
             
-            vertices = [(-2.5,2.3,1),(-2.5,-3,1),(1.5,-3,1),(1.5,2.3,1),(-2.5,2.3,0),(-2.5,-3,0),(1.5,3,0),(1.5,2.3,0)]
+            vertices = [(-2.5,2.3,1),(-2.5,-2.3,1),(1.5,-2.3,1),(1.5,2.3,1),(-2.5,2.3,0),(-2.5,-2.3,0),(1.5,2.3,0),(1.5,-2.3,0)]
                    
             for i in range(0,8):
                 bpy.ops.object.text_add(location = vertices[i])
                 ob = bpy.context.object
                 ob.data.body = names[i]
-
+                ob.active_material = mat            
             
 def make_rectangle(radius,origin):
         bpy.ops.mesh.primitive_plane_add(
@@ -211,6 +225,12 @@ def make_triangle(origin):
 
 def make_cube(radius,origin):
     bpy.ops.mesh.primitive_cube_add(location=origin)
+    
+def make_cone(radius,origin):
+    bpy.ops.mesh.primitive_cone_add(
+        vertices=4, 
+        radius1=radius,
+        location=origin)
 
 def get_slope(vertex1,vertex2):
     return (vertex2[1]-vertex1[1])/(vertex2[0]-vertex1[0])
@@ -252,7 +272,6 @@ def clear_heirarchy():
         if block.users == 0:
             bpy.data.images.remove(block)
 
-
 def parse_file():   
     f = open("input.txt","r")
     
@@ -268,12 +287,10 @@ def parse_file():
     cultures = int(num_cultures.split(' ', 1)[1])
     years = int(num_years.split(' ', 1)[1])
     
-    
     f.close()
     return years,tuple_names,cultures,script
 
 if __name__=="__main__":
-
     
     script_start = time.time()
     clear_screen()
@@ -320,7 +337,7 @@ if __name__=="__main__":
     while number_of_frame < scene.frame_end:
         
         scene.frame_set(number_of_frame)
-        if(tuples==8):
+        if(tuples==8 or tuples==5):
             kernel.active_material.keyframe_insert(data_path="alpha")
         for culture in culture_list:
             culture.location = positions[randint(0,100)]

@@ -1,4 +1,4 @@
 years: 300
-hot, soft, cold, short, med, tall, group, alone
+hot, soft, cold, short, med
 cultures: 5 
 Hello, Goodbye -plot
