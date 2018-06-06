@@ -299,16 +299,18 @@ def clear_heirarchy():
 def parse_file():   
     f = open("input.txt","r")
     
-    num_frames = f.readline()
+    num_years = f.readline()
     tuples_def = f.readline()
+    trye = tuples_def.split(':')
+    tuples_def = ''.join(trye)
     num_cultures = f.readline()
-
     script = f.readline()
-    script = script.split()
     
+    script = script.split()
     tuple_names = [x.strip() for x in tuples_def.split(',')]
-    cultures = int(num_cultures.split(' ', 1)[0])
-    years = int(num_frames.split(' ', 1)[0])
+    cultures = int(num_cultures.split(' ', 1)[1])
+    years = int(num_years.split(' ', 1)[1])
+    
     
     f.close()
     return years,tuple_names,cultures,script
@@ -320,11 +322,13 @@ if __name__=="__main__":
     clear_screen()
     clear_heirarchy()
     scene = bpy.context.scene
-    script = ["python3", "google-ngrams/getngrams.py"]
-    
+
     years,tuple_names,cultures,end_script = parse_file()
+    
     tuples = len(tuple_names)
+    script = ["python3", "google-ngrams/getngrams.py"]
     script.extend(end_script)
+    
     p = Popen(script, stdout=PIPE, bufsize=1, universal_newlines=True)
 
     scene.frame_start = 0

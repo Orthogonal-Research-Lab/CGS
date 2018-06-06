@@ -1,4 +1,4 @@
-250 //frames
-hot, soft, confusing
-2 // number of cultures
+years: 300
+hot, soft, confusing, fire
+cultures: 5 
 Hello, Goodbye -plot
