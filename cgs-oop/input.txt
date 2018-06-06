@@ -2,3 +2,4 @@
 3 // number of tuples
 2 // number of cultures
 hot, cold, soft
+python3 google-ngrams/getngrams.py Hello, Goodbye -plot

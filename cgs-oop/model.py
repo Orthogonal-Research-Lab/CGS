@@ -1,10 +1,12 @@
 import bpy
 from random import random, uniform,randint
 import mathutils
+from subprocess import Popen, PIPE, run
 from mathutils import Vector
 import math
 import sys
 import time
+import io
         
 class graphics_factory(object):
     
@@ -137,6 +139,7 @@ class graphics_factory(object):
             ob = bpy.context.object
             if(names != None):
                 ob.data.body = names[1]
+                
         elif(shape=="Triangle"):
             bpy.ops.object.text_add(location=(0,-1,0))
             ob = bpy.context.object
@@ -152,6 +155,7 @@ class graphics_factory(object):
             ob = bpy.context.object
             if(names != None):
                 ob.data.body = names[2]
+                
         elif(shape=="Square"):
             bpy.ops.object.text_add(location = (-2.5,2.3,0))
             ob = bpy.context.object
@@ -172,6 +176,7 @@ class graphics_factory(object):
             ob = bpy.context.object
             if(names != None):
                 ob.data.body = names[3]
+                
         elif(shape=="Cube"):
             bpy.ops.object.text_add(location = (-2.5,2.3,0))
             ob = bpy.context.object
@@ -275,6 +280,8 @@ def parse_file():
     num_tuples = f.readline()
     num_cultures = f.readline()
     tuples_def = f.readline()
+    script = f.readline()
+    script = script.split()
     
     tuple_names = [x.strip() for x in tuples_def.split(',')]
     tuples = int(num_tuples.split(' ', 1)[0])
@@ -282,10 +289,10 @@ def parse_file():
     years = int(num_frames.split(' ', 1)[0])
     
     if len(tuple_names) != tuples:
-        raise ValueError("number of tuples entered do not match amount of tuples")
+        raise ValueError("number of tuples entered do not match amount of tuples. Change lines 2 and 4 of input file to have same amount of words in line 4 as number in line 2")
     
     f.close()
-    return years, tuples,cultures,tuple_names
+    return years, tuples,cultures,tuple_names, script
 
 if __name__=="__main__":
 
@@ -294,7 +301,10 @@ if __name__=="__main__":
     clear_screen()
     clear_heirarchy()
     scene = bpy.context.scene
-    years,tuples,cultures,tuple_names = parse_file()
+    
+    years,tuples,cultures,tuple_names, script = parse_file()
+    
+    p = Popen(script, stdout=PIPE, bufsize=1, universal_newlines=True)
 
     scene.frame_start = 0
     rounded_year = years - (years % 20)
@@ -340,3 +350,14 @@ if __name__=="__main__":
 
     # bpy.ops.wm.save_as_mainfile(filepath = '~/Documents/CGS/oop-blender-demo.blend')
     print("script finished in {} seconds".format(time.time() - script_start))
+
+    # print("opening benchmark graph")
+    # for line in p.stdout:
+        # if "Data" in line:
+            # csv = line.split()
+            # csv = csv[-1]
+#             
+    # csv=csv.replace(".csv",".png")
+    # run(["open", csv])
+    # print("finished everything in {}".format(time.time() - script_start))
+
