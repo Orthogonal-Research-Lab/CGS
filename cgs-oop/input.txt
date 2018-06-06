@@ -1,4 +1,4 @@
 250 //frames
-hot, cold, soft, confusing
+hot, soft, confusing
 2 // number of cultures
-python3 google-ngrams/getngrams.py Hello, Goodbye -plot
+Hello, Goodbye -plot

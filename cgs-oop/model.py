@@ -320,10 +320,11 @@ if __name__=="__main__":
     clear_screen()
     clear_heirarchy()
     scene = bpy.context.scene
+    script = ["python3", "google-ngrams/getngrams.py"]
     
-    years,tuple_names,cultures,script = parse_file()
+    years,tuple_names,cultures,end_script = parse_file()
     tuples = len(tuple_names)
-    
+    script.extend(end_script)
     p = Popen(script, stdout=PIPE, bufsize=1, universal_newlines=True)
 
     scene.frame_start = 0
