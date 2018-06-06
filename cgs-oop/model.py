@@ -77,7 +77,7 @@ class graphics_factory(object):
         elif(shape=="Triangle"):
             cam_ob.location = (2,3,4.5)
         elif(shape=="Cube"):
-            cam_ob.location = (1,-2,3)
+            cam_ob.location = (2,-4,4)
             cam_ob.rotation_euler = (math.radians(45), 0.0, math.radians(30))
 
         return cam_ob
@@ -122,7 +122,7 @@ class graphics_factory(object):
             mat.diffuse_color = (1,0,0)
             mat.use_transparency = True
             mat.transparency_method = 'Z_TRANSPARENCY'
-            mat.alpha = 0.1
+            mat.alpha = 0.3
         kernel.active_material = mat
         
         return kernel
@@ -157,65 +157,22 @@ class graphics_factory(object):
                 ob.data.body = names[2]
                 
         elif(shape=="Square"):
-            bpy.ops.object.text_add(location = (-2.5,2.3,0))
-            ob = bpy.context.object
-            if(names != None):
-                ob.data.body = names[0]
+            vertices = [(-2.5,2.3,0),(-2.5,-3,0),(1.5,-3,0),(1.5,2.3,0)]
             
-            bpy.ops.object.text_add(location=(-2.5,-3,0))
-            ob = bpy.context.object
-            if(names != None):
-                ob.data.body = names[1]
-
-            bpy.ops.object.text_add(location=(1.5,-3,0))
-            ob = bpy.context.object
-            if(names != None):
-                ob.data.body = names[2]
-            
-            bpy.ops.object.text_add(location=(1.5,2.3,0))
-            ob = bpy.context.object
-            if(names != None):
-                ob.data.body = names[3]
+            for i in range(0,4)
+                bpy.ops.object.text_add(location=vertices[i])
+                ob = bpy.context.object
+                ob.data.body = names[i]
                 
         elif(shape=="Cube"):
             
-            #for i in range(0,8):
-             #   bpy.ops.object.text_add(location = (-2.5,2.3,0))
-              #  ob = bpy.context.object
-               # if(names!=None):
-                #    ob.data.body = names[i]
+            vertices = [(-2.5,2.3,1),(-2.5,-3,1),(1.5,-3,1),(1.5,2.3,1),(-2.5,2.3,0),(-2.5,-3,0),(1.5,3,0),(1.5,2.3,0)]
                    
-            bpy.ops.object.text_add(location = (-2.5,2.3,0))
-            ob = bpy.context.object
-            ob.data.body = "holder"
-            
-            bpy.ops.object.text_add(location=(-2.5,-3,0))
-            ob = bpy.context.object
-            ob.data.body = "holder"
+            for i in range(0,8):
+                bpy.ops.object.text_add(location = vertices[i])
+                ob = bpy.context.object
+                ob.data.body = names[i]
 
-            bpy.ops.object.text_add(location=(1.5,-3,0))
-            ob = bpy.context.object
-            ob.data.body = "holder"
-            
-            bpy.ops.object.text_add(location=(1.5,2.3,0))
-            ob = bpy.context.object
-            ob.data.body = "holder"
-
-            bpy.ops.object.text_add(location=(1.5,2.3,0))
-            ob = bpy.context.object
-            ob.data.body = "holder"
-            
-            bpy.ops.object.text_add(location=(1.5,2.3,0))
-            ob = bpy.context.object
-            ob.data.body = "holder"
-            
-            bpy.ops.object.text_add(location=(1.5,2.3,0))
-            ob = bpy.context.object
-            ob.data.body = "holder"
-            
-            bpy.ops.object.text_add(location=(1.5,2.3,0))
-            ob = bpy.context.object
-            ob.data.body = "holder"
             
 def make_rectangle(radius,origin):
         bpy.ops.mesh.primitive_plane_add(
