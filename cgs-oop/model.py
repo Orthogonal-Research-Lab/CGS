@@ -178,6 +178,13 @@ class graphics_factory(object):
                 ob.data.body = names[3]
                 
         elif(shape=="Cube"):
+            
+            #for i in range(0,8):
+             #   bpy.ops.object.text_add(location = (-2.5,2.3,0))
+              #  ob = bpy.context.object
+               # if(names!=None):
+                #    ob.data.body = names[i]
+                   
             bpy.ops.object.text_add(location = (-2.5,2.3,0))
             ob = bpy.context.object
             ob.data.body = "holder"
@@ -187,6 +194,22 @@ class graphics_factory(object):
             ob.data.body = "holder"
 
             bpy.ops.object.text_add(location=(1.5,-3,0))
+            ob = bpy.context.object
+            ob.data.body = "holder"
+            
+            bpy.ops.object.text_add(location=(1.5,2.3,0))
+            ob = bpy.context.object
+            ob.data.body = "holder"
+
+            bpy.ops.object.text_add(location=(1.5,2.3,0))
+            ob = bpy.context.object
+            ob.data.body = "holder"
+            
+            bpy.ops.object.text_add(location=(1.5,2.3,0))
+            ob = bpy.context.object
+            ob.data.body = "holder"
+            
+            bpy.ops.object.text_add(location=(1.5,2.3,0))
             ob = bpy.context.object
             ob.data.body = "holder"
             
@@ -277,22 +300,18 @@ def parse_file():
     f = open("input.txt","r")
     
     num_frames = f.readline()
-    num_tuples = f.readline()
-    num_cultures = f.readline()
     tuples_def = f.readline()
+    num_cultures = f.readline()
+
     script = f.readline()
     script = script.split()
     
     tuple_names = [x.strip() for x in tuples_def.split(',')]
-    tuples = int(num_tuples.split(' ', 1)[0])
     cultures = int(num_cultures.split(' ', 1)[0])
     years = int(num_frames.split(' ', 1)[0])
     
-    if len(tuple_names) != tuples:
-        raise ValueError("number of tuples entered do not match amount of tuples. Change lines 2 and 4 of input file to have same amount of words in line 4 as number in line 2")
-    
     f.close()
-    return years, tuples,cultures,tuple_names, script
+    return years,tuple_names,cultures,script
 
 if __name__=="__main__":
 
@@ -302,7 +321,8 @@ if __name__=="__main__":
     clear_heirarchy()
     scene = bpy.context.scene
     
-    years,tuples,cultures,tuple_names, script = parse_file()
+    years,tuple_names,cultures,script = parse_file()
+    tuples = len(tuple_names)
     
     p = Popen(script, stdout=PIPE, bufsize=1, universal_newlines=True)
 
