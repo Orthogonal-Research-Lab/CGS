@@ -1,4 +1,4 @@
 years: 300
-hot, soft, cold, short, med
+hot, soft, cold,taut,relaxed
 cultures: 5 
 Hello, Goodbye -plot

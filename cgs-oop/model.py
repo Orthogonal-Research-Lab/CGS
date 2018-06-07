@@ -178,6 +178,14 @@ class graphics_factory(object):
                 ob.data.body = names[i]
                 ob.active_material = mat
                 
+        elif(shape=="Cone"):
+            vertices = [(0,0,2.1),(1.6,-.3,0),(-.4,2.4,0),(-1,-2,0),(-3,0,0)]
+            for i in range(0,5):
+                bpy.ops.object.text_add(location = vertices[i])
+                ob = bpy.context.object
+                ob.data.body = names[i]
+                ob.active_material = mat      
+                                
         elif(shape=="Cube"):
             
             vertices = [(-2.5,2.3,1),(-2.5,-2.3,1),(1.5,-2.3,1),(1.5,2.3,1),(-2.5,2.3,0),(-2.5,-2.3,0),(1.5,2.3,0),(1.5,-2.3,0)]
@@ -344,7 +352,7 @@ if __name__=="__main__":
             culture.keyframe_insert(data_path="location")
 
         # move next 10 frames forward - Blender will figure out what to do between this time
-        number_of_frame += 1
+        number_of_frame += 5
 
 
     # bpy.ops.wm.save_as_mainfile(filepath = '~/Documents/CGS/oop-blender-demo.blend')
