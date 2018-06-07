@@ -289,14 +289,16 @@ def parse_file():
     tuples_def = ''.join(trye)
     num_cultures = f.readline()
     script = f.readline()
+    years_per_frame = f.readline()
     
     script = script.split()
     tuple_names = [x.strip() for x in tuples_def.split(',')]
     cultures = int(num_cultures.split(' ', 1)[1])
     years = int(num_years.split(' ', 1)[1])
+    year_multiple = int(years_per_frame.split(': ',1)[1])
     
     f.close()
-    return years,tuple_names,cultures,script
+    return years,tuple_names,cultures,script, year_multiple
 
 if __name__=="__main__":
     
@@ -305,7 +307,7 @@ if __name__=="__main__":
     clear_heirarchy()
     scene = bpy.context.scene
 
-    years,tuple_names,cultures,end_script = parse_file()
+    years,tuple_names,cultures,end_script,years_per_frame = parse_file()
     
     tuples = len(tuple_names)
     script = ["python3", "google-ngrams/getngrams.py"]
@@ -315,7 +317,7 @@ if __name__=="__main__":
 
     scene.frame_start = 0
     rounded_year = years - (years % 20)
-    scene.frame_end = (rounded_year/20) +5
+    scene.frame_end = (rounded_year/years_per_frame)
     
     lamp, cam, kernel, culture_list = graphics_factory.create(tuples,cultures,tuple_names)
     
