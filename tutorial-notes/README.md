@@ -3,3 +3,5 @@ This folder contains a few detailed descriptions of concepts that might be usefu
 1) membership function.
 
 2) CGS as receptive fields.
+
+3) description of a circular representation of CMYK color space.
