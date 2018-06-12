@@ -6,4 +6,4 @@ This folder contains a few detailed descriptions of concepts that might be usefu
 
 3) description of a circular representation of CMYK color space (in circular-representation directory).
 
-4) description of benchmarks based on continuum of shape primitives and linguistic labels (Googlen-gram Benchmark).
+4) description of benchmarks based on continuum of shape primitives and linguistic labels (Google n-gram Benchmark).
