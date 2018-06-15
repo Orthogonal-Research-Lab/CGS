@@ -14,6 +14,12 @@ class graphics_factory(object):
     # meant as abstraction layer between user and creation of objects
     @staticmethod
     def create(tuples,num_of_cultures,tuple_names):
+
+    # function that takes care of creating graphics
+    # parameters - 
+    # tuples: integer of tuple amount specified by user
+    # num_of_cultures: number of cultures user wants to see in simulation
+    # tuple_names: name of tuples 
         culture_list=[]
         
         if(tuples == 2):
@@ -40,9 +46,13 @@ class graphics_factory(object):
         
         return lamp,cam,kernel,culture_list
         
-    #creates cultures
     @staticmethod
     def create_culture(name,origin,shape):
+    # function creates cultures specified by user
+    # parameters-
+    # name: name of cultures used by blender to keep track of objects
+    # origin: coordinate where culture starts in simulation
+    # shape: string that determines what type of polygon culture will be
         
         if(shape=="Rectangle"):
             make_rectangle(0.2,origin)
@@ -66,6 +76,10 @@ class graphics_factory(object):
 
     @staticmethod
     def create_camera(name,shape):
+    # function creates camera object that user views simulation from
+    # parameters-
+    # name: name of camera used by blender
+    # shape: string to abstract knowledge of other objects away from camera
         
         cam_data = bpy.data.cameras.new(name="cam")  
         cam_ob = bpy.data.objects.new(name="Kamerka", object_data=cam_data)  
@@ -88,6 +102,10 @@ class graphics_factory(object):
         return cam_ob
     @staticmethod
     def create_lamp(name,shape):
+    # function creates lamp object that user views simulation from
+    # parameters-
+    # name: name of lamp object used by blender
+    # shape: string to abstract knowledge of other objects away from camera
         data = bpy.data.lamps.new(name="lampa", type='POINT')  
         lamp = bpy.data.objects.new(name=name, object_data=data)  
         scene.objects.link(lamp)
@@ -103,6 +121,11 @@ class graphics_factory(object):
 
     @staticmethod
     def create_kernel(name,radius,shape):
+    # function creates kernel
+    # parameters-
+    # name: name of kernel used by blender
+    # shape: string to abstract knowledge of other objects away from kernel
+    # radius: integer radius of kernel
         origin = (0,0,0)
         if(shape=="Rectangle"):
             make_rectangle(radius,origin)
@@ -129,6 +152,7 @@ class graphics_factory(object):
         mat = bpy.data.materials.new("kernel_color")
         mat.diffuse_color = (1,1,1)
         if(shape == "Cube" or shape == "Cone"):
+            # in case kernel is 3-d make it more transparent
             mat.diffuse_color = (1,0,0)
             mat.use_transparency = True
             mat.transparency_method = 'Z_TRANSPARENCY'
@@ -139,6 +163,10 @@ class graphics_factory(object):
     
     @staticmethod
     def create_text(shape,names=None):
+    # function creates text for all objects
+    # parameters-
+    # name: list of names given by user
+    # shape: string to abstract knowledge of other objects away from text
         mat = bpy.data.materials.new("text_color")
         mat.diffuse_color = (0,0,0)
         
@@ -197,25 +225,40 @@ class graphics_factory(object):
                 ob.active_material = mat            
             
 def make_rectangle(radius,origin):
-        bpy.ops.mesh.primitive_plane_add(
-        radius = radius,
-        location= origin, 
-        rotation=(0, 0, 0))
+    # helper function that creates rectangles
+    # parameters-
+    # radius: radius of rectangle to be made
+    # origin: where rectangle will be placed
+
+    bpy.ops.mesh.primitive_plane_add(
+    radius = radius,
+    location= origin, 
+    rotation=(0, 0, 0))
         
 def make_square(radius,origin):
+    # helper function that creates squares
+    # parameters-
+    # radius: radius of squares to be made
+    # origin: where squares will be placed
     bpy.ops.mesh.primitive_plane_add(
     radius = radius,
     location = origin,
     rotation = (0,0,0))
         
 def make_circle(radius,origin):
+    # helper function that creates circle
+    # parameters-
+    # radius: radius of circle to be made
+    # origin: where circle will be placed
     bpy.ops.mesh.primitive_circle_add(
         radius = radius,
         location = (0,1,1),
         fill_type = "TRIFAN")
 
 def make_triangle(origin):
-                
+    # helper function that creates triangle
+    # parameters-
+    # origin: where triangle will be placed
     vert = [(0,0,0),(5,0,0),(2.5,5,0)]
     face = [(0,1,2)]
     edge = [(0,1),(1,2),(2,0)]
@@ -232,18 +275,31 @@ def make_triangle(origin):
     return ob
 
 def make_cube(radius,origin):
+    # helper function that creates cube
+    # parameters-
+    # radius: radius of cube to be made
+    # origin: where cube will be placed
     bpy.ops.mesh.primitive_cube_add(location=origin)
     
 def make_cone(radius,origin):
+    # helper function that creates cone
+    # parameters-
+    # radius: radius of cone to be made
+    # origin: where cone will be placed
     bpy.ops.mesh.primitive_cone_add(
         vertices=4, 
         radius1=radius,
         location=origin)
 
 def get_slope(vertex1,vertex2):
+    # calculates slope
     return (vertex2[1]-vertex1[1])/(vertex2[0]-vertex1[0])
     
 def get_triangle_constraints(vertices):
+    # calculates where points can go based on kernel outline
+    # parameters-
+    # vertices of triangle
+
     a = get_slope(vertices[0],vertices[2])
     b = get_slope(vertices[2],vertices[1])
 
@@ -281,6 +337,8 @@ def clear_heirarchy():
             bpy.data.images.remove(block)
 
 def parse_file():   
+    # function parses input file to determine proper parameters
+
     f = open("input.txt","r")
     
     num_years = f.readline()
@@ -302,7 +360,9 @@ def parse_file():
 
 if __name__=="__main__":
     
+    # benchmark script total time
     script_start = time.time()
+    # make sure screen is cleared from last simulation
     clear_screen()
     clear_heirarchy()
     scene = bpy.context.scene
@@ -348,6 +408,7 @@ if __name__=="__main__":
         
         scene.frame_set(number_of_frame)
         if(tuples==8 or tuples==5):
+            # make kernel transparent if 3 dimensional
             kernel.active_material.keyframe_insert(data_path="alpha")
         for culture in culture_list:
             culture.location = positions[randint(0,100)]
@@ -359,6 +420,8 @@ if __name__=="__main__":
 
     # bpy.ops.wm.save_as_mainfile(filepath = '~/Documents/CGS/oop-blender-demo.blend')
     print("script finished in {} seconds".format(time.time() - script_start))
+
+# uncomment this if you want to see benchmark graph from n grams data
 
     # print("opening benchmark graph")
     # for line in p.stdout:
