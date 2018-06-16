@@ -25,45 +25,24 @@ def create_data(pixels):
         for j in range(i, pixels):
             for x in range(i,pixels - i):
                 for y in range(j,pixels -j):
-                    if i > 3 and j > 3:
+                    if i > 3 and j > 3 and i + x < pixels and j + y < pixels :
+                        draw_rect.rectangle(((i,j),(x+i,y+j)), fill= "white")
+                        draw_circle.ellipse(((i,j),(x+i,y+j)), fill= "white")
+                        draw_hex.polygon([(i,j),(i+x,y-j),(i+x+x,y-j),(i+(3*x),j),(i+x+x,y+j),(i+x,y+j)], fill="white")
+                        pix_hex = numpy.array(im_hex)
+                        edges_hex = canny(pix_hex)
+                        list_of_training_data.append((edges_hex,'Hexagon'))
 
-                        if(random.random() < .0001):
-                            draw_rect.rectangle(((i,j),(x+i,y+j)), fill= "white")
-                            draw_circle.ellipse(((i,j),(x+i,y+j)), fill= "white")
+                        pix_rect = numpy.array(im_rect)
+                        pix_circle = numpy.array(im_circle)
 
-                            pix_rect = numpy.array(im_rect)
-                            pix_circle = numpy.array(im_circle)
+                        # algorithm to extract edges from picture
+                        edges_rect = canny(pix_rect)
+                        edges_circle = canny(pix_circle)
 
-                            # algorithm to extract edges from picture
-                            edges_rect = canny(pix_rect)
-                            edges_circle = canny(pix_circle)
+                        list_of_training_data.append((edges_rect,'Rectangle'))
+                        list_of_training_data.append((edges_circle,'Circle'))
 
-                            list_of_training_data.append((edges_rect,'Rectangle'))
-                            list_of_training_data.append((edges_circle,'Circle'))
-                            if(i%2==0):
-                                half = i/2
-                                difference = i-half
-                                z = half/2
-                                draw_hex.polygon([(z/3,i),(z,half),(z*3,half),(i,i),(z*3,i+difference),(z,i+difference)], fill="white")
-                                print(z/3,i)
-                                pix_hex = numpy.array(im_hex)
-                                edges_hex = canny(pix_hex)
-                                list_of_training_data.append((edges_hex,'Hexagon'))
-
-
-    # # hexagons
-    # for i in range(0,pixels):
-    #     im = Image.new("1", (pixels,pixels))
-    #     draw = ImageDraw.Draw(im)
-    #     for j in range(i, pixels):
-    #         for x in range(i,pixels - i):
-    #             for y in range(j,pixels -j):
-    #                 if i > 3 and j > 3:
-    #                     draw.ellipse(((i,j),(x+i,y+j)), fill= "white")
-    #                     pix = numpy.array(im)
-    #                     # algorithm to extract edges from picture
-    #                     edges2 = canny(pix)
-    #                     list_of_training_data.append((edges2,'Circle'))
     # # dodecagons
     # for i in range(0,pixels):
     #     im = Image.new("1", (pixels,pixels))
