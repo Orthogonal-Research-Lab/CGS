@@ -51,7 +51,7 @@ def getNeighbors(trainingSet, testInstance, k):
     distances.sort(key=operator.itemgetter(1))
     neighbors = []
     for x in range(k):
-            neighbors.append(distances[x][0])
+        neighbors.append(distances[x][0])
     return neighbors
 
 def getResponse(neighbors):
@@ -60,13 +60,33 @@ def getResponse(neighbors):
 # neighbors: list of neighbors to testInstance
     classVotes = {}
     for x in range(len(neighbors)):
-            response = neighbors[x][-1]
-            if response in classVotes:
-                    classVotes[response] += 1
-            else:
-                    classVotes[response] = 1
+        response = neighbors[x][-1]
+        if response in classVotes:
+            classVotes[response] += 1
+        else:
+            classVotes[response] = 1
     sortedVotes = sorted(classVotes.items(), key=operator.itemgetter(1), reverse=True)
     return sortedVotes[0][0]
+
+
+def getContinuumResponse(neighbors):
+
+    summed = 0
+    for x in range(len(neighbors)):
+        response = neighbors[x][-1]
+        if response == 'Hexagon':
+            val = 0.5
+        elif response == 'Rectangle':
+            val = 1
+        else:
+            val = -1
+        summed += val
+
+    if summed < 0:
+        summed = 0
+    result = summed/len(neighbors)
+
+    return result
 
 def getAccuracy(testSet, predictions):
 #function benchmarks accuracy of knn algo
@@ -83,10 +103,12 @@ if __name__=='__main__':
 
     # optional arguments for how many neighbors you want to poll and what test/train split you want
     parser = argparse.ArgumentParser()
+    parser.add_argument('continuum', nargs='?', default=False)
     parser.add_argument('k', nargs='?', default=6)
     parser.add_argument('split', nargs='?', default=0.67)
     arg = parser.parse_args()
-    split = arg.split
+    print(arg)
+    split = float(arg.split)
     k = arg.k
 
     trainingSet=[]
@@ -101,10 +123,17 @@ if __name__=='__main__':
 
     for x in range(len(testSet)):
         neighbors = getNeighbors(trainingSet, testSet[x], k)
-        result = getResponse(neighbors)
+
+        if arg.continuum == 'True':
+        
+           result = getResponse(neighbors)
+           continuum = getContinuumResponse(neighbors)
+           print('> predicted=' +repr(result)+ ', actual=' + repr(testSet[x][-1])+ 'continuum val is ' +repr(continuum)) 
+        else:
+           result = getResponse(neighbors)
+           print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][-1]))
         predictions.append(result)
 
-        print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][-1]))
     accuracy = getAccuracy(testSet, predictions)
     print('Accuracy: ' + repr(accuracy) + '%')
 
