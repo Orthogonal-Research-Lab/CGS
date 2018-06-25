@@ -5,6 +5,7 @@ import pickle
 import random
 import argparse
 from skimage.feature import canny
+import time
 
 
 def create_data(pixels):
@@ -22,46 +23,48 @@ def create_data(pixels):
         draw_circle = ImageDraw.Draw(im_circle)
         im_hex = Image.new("1",(pixels,pixels))
         draw_hex = ImageDraw.Draw(im_hex)
+
+        im_oct = Image.new("1",(pixels,pixels))
+        draw_oct = ImageDraw.Draw(im_oct)
+
         for j in range(i, pixels):
             for x in range(i,pixels - i):
                 for y in range(j,pixels -j):
-                    if i > 3 and j > 3 and i + x < pixels and j + y < pixels :
+                    if i > 3 and j > 3:
                         draw_rect.rectangle(((i,j),(x+i,y+j)), fill= "white")
                         draw_circle.ellipse(((i,j),(x+i,y+j)), fill= "white")
                         draw_hex.polygon([(i,j),(i+x,y-j),(i+x+x,y-j),(i+(3*x),j),(i+x+x,y+j),(i+x,y+j)], fill="white")
-                        pix_hex = numpy.array(im_hex)
-                        edges_hex = canny(pix_hex)
-                        list_of_training_data.append((edges_hex,'Hexagon'))
 
+                        h = abs(j-y)
+                        if(j != y-j and h >2 and h-(y-h) >= 0):
+                            # print("({0},{1}),({2},{3}),({4},{5}),({6},{7}),({8},{9}),({10},{11}),({12},{13}),({14},{15})".format(x,y , x,h, i+x,h-(y-h), x+i+i,h-(y-h), x+(3*i),h ,x+(3*i),y, x+i+i,y+j, i+x,y+j))
+                            draw_oct.polygon([(x,y),(x,h),(i+x,h-(y-h)),(x+i+i,h-(y-h)), (x+(3*i),h),(x+(3*i),y),(x+i+i,y+j),(i+x,y+j)], fill="white")
+
+                        pix_hex = numpy.array(im_hex)
                         pix_rect = numpy.array(im_rect)
                         pix_circle = numpy.array(im_circle)
+                        pix_oct = numpy.array(im_oct)
 
                         # algorithm to extract edges from picture
+                        edges_hex = canny(pix_hex)
                         edges_rect = canny(pix_rect)
                         edges_circle = canny(pix_circle)
+                        edges_oct = canny(pix_oct)
 
                         list_of_training_data.append((edges_rect,'Rectangle'))
                         list_of_training_data.append((edges_circle,'Circle'))
-
-    # # dodecagons
-    # for i in range(0,pixels):
-    #     im = Image.new("1", (pixels,pixels))
-    #     draw = ImageDraw.Draw(im)
-    #     for j in range(i, pixels):
-    #         for x in range(i,pixels - i):
-    #             for y in range(j,pixels -j):
-    #                 if i > 3 and j > 3:
-    #                     draw.ellipse(((i,j),(x+i,y+j)), fill= "white")
-    #                     pix = numpy.array(im)
-    #                     # algorithm to extract edges from picture
-    #                     edges2 = canny(pix)
-    #                     list_of_training_data.append((edges2,'Circle'))
+                        list_of_training_data.append((edges_hex,'Hexagon'))
+                        list_of_training_data.append((edges_oct,'Octagon'))
 
     return list_of_training_data
+
+
+# def benchmark_data():
 
 if __name__=='__main__':
 
     # optional pixels argument
+    script_start = time.time()
     parser = argparse.ArgumentParser()
     parser.add_argument('pixels', nargs='?', default=15)
     arg = parser.parse_args()
@@ -70,3 +73,5 @@ if __name__=='__main__':
 
     with open('data.pickle','wb') as f:
         pickle.dump(dataset,f)
+
+    print("script finished in {} seconds".format(time.time() - script_start))

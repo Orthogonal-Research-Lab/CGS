@@ -124,13 +124,11 @@ if __name__=='__main__':
     for x in range(len(testSet)):
         neighbors = getNeighbors(trainingSet, testSet[x], k)
 
+        result = getResponse(neighbors)
         if arg.continuum == 'True':
-        
-           result = getResponse(neighbors)
            continuum = getContinuumResponse(neighbors)
-           print('> predicted=' +repr(result)+ ', actual=' + repr(testSet[x][-1])+ 'continuum val is ' +repr(continuum)) 
+           print('> predicted=' +repr(result)+ ', actual=' + repr(testSet[x][-1])+ 'continuum val= ' +repr(continuum)) 
         else:
-           result = getResponse(neighbors)
            print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][-1]))
         predictions.append(result)
 
