@@ -75,9 +75,11 @@ def getContinuumResponse(neighbors):
     for x in range(len(neighbors)):
         response = neighbors[x][-1]
         if response == 'Hexagon':
-            val = 0.5
+            val = 0.6
         elif response == 'Rectangle':
             val = 1
+        elif response == 'Octagon':
+            val = 0.4
         else:
             val = -1
         summed += val
@@ -103,13 +105,14 @@ if __name__=='__main__':
 
     # optional arguments for how many neighbors you want to poll and what test/train split you want
     parser = argparse.ArgumentParser()
-    parser.add_argument('continuum', nargs='?', default=False)
     parser.add_argument('k', nargs='?', default=6)
+    parser.add_argument('-c', action='store_true')
     parser.add_argument('split', nargs='?', default=0.67)
     arg = parser.parse_args()
     print(arg)
     split = float(arg.split)
     k = arg.k
+    classify = arg.c
 
     trainingSet=[]
     testSet=[]
@@ -125,9 +128,9 @@ if __name__=='__main__':
         neighbors = getNeighbors(trainingSet, testSet[x], k)
 
         result = getResponse(neighbors)
-        if arg.continuum == 'True':
+        if classify == False:
            continuum = getContinuumResponse(neighbors)
-           print('> predicted=' +repr(result)+ ', actual=' + repr(testSet[x][-1])+ 'continuum val= ' +repr(continuum)) 
+           print('actual=' + repr(testSet[x][-1])+ 'continuum val= ' +repr(continuum)) 
         else:
            print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][-1]))
         predictions.append(result)
