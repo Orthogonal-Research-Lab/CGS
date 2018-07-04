@@ -2,8 +2,10 @@ import PIL.ImageDraw as ImageDraw,PIL.Image as Image, PIL.ImageShow as ImageShow
 import numpy
 import sys
 import pickle
+import random
 import argparse
 from skimage.feature import canny
+import time
 
 
 def create_data(pixels):
@@ -13,18 +15,36 @@ def create_data(pixels):
 
     list_of_training_data = []
 
-    # rectangles
+    # creating rectangles and circles
     for i in range(0,pixels):
         im_rect = Image.new("1", (pixels,pixels))
         draw_rect = ImageDraw.Draw(im_rect)
         im_circle = Image.new("1", (pixels,pixels))
         draw_circle = ImageDraw.Draw(im_circle)
+        im_hex = Image.new("1",(pixels,pixels))
+        draw_hex = ImageDraw.Draw(im_hex)
+
+        im_oct = Image.new("1",(pixels,pixels))
+        draw_oct = ImageDraw.Draw(im_oct)
+
         for j in range(i, pixels):
             for x in range(i,pixels - i):
                 for y in range(j,pixels -j):
                     if i > 3 and j > 3:
                         draw_rect.rectangle(((i,j),(x+i,y+j)), fill= "white")
                         draw_circle.ellipse(((i,j),(x+i,y+j)), fill= "white")
+                        if( j-1 > y-j):
+                            draw_hex.polygon([(i,j),(i+x,y-j),(i+x+x,y-j),(i+(3*x),j),(i+x+x,y+j),(i+x,y+j)], fill="white")
+                            pix_hex = numpy.array(im_hex)
+                            edges_hex = canny(pix_hex)
+                            list_of_training_data.append((edges_hex,'Hexagon'))
+
+                        h = abs(j-y)
+                        if(j != y-j and h >2 and h-(y-h) >= 0):
+                            draw_oct.polygon([(x,y),(x,h),(i+x,h-(y-h)),(x+i+i,h-(y-h)), (x+(3*i),h),(x+(3*i),y),(x+i+i,y+j),(i+x,y+j)], fill="white")
+                            pix_oct = numpy.array(im_oct)
+                            edges_oct = canny(pix_oct)
+                            list_of_training_data.append((edges_oct,'Octagon'))
 
                         pix_rect = numpy.array(im_rect)
                         pix_circle = numpy.array(im_circle)
@@ -36,43 +56,24 @@ def create_data(pixels):
                         list_of_training_data.append((edges_rect,'Rectangle'))
                         list_of_training_data.append((edges_circle,'Circle'))
 
-    # # hexagons
-    # for i in range(0,pixels):
-    #     im = Image.new("1", (pixels,pixels))
-    #     draw = ImageDraw.Draw(im)
-    #     for j in range(i, pixels):
-    #         for x in range(i,pixels - i):
-    #             for y in range(j,pixels -j):
-    #                 if i > 3 and j > 3:
-    #                     draw.ellipse(((i,j),(x+i,y+j)), fill= "white")
-    #                     pix = numpy.array(im)
-    #                     # algorithm to extract edges from picture
-    #                     edges2 = canny(pix)
-    #                     list_of_training_data.append((edges2,'Circle'))
-    # # dodecagons
-    # for i in range(0,pixels):
-    #     im = Image.new("1", (pixels,pixels))
-    #     draw = ImageDraw.Draw(im)
-    #     for j in range(i, pixels):
-    #         for x in range(i,pixels - i):
-    #             for y in range(j,pixels -j):
-    #                 if i > 3 and j > 3:
-    #                     draw.ellipse(((i,j),(x+i,y+j)), fill= "white")
-    #                     pix = numpy.array(im)
-    #                     # algorithm to extract edges from picture
-    #                     edges2 = canny(pix)
-    #                     list_of_training_data.append((edges2,'Circle'))
-
     return list_of_training_data
+
+# print("({0},{1}),({2},{3}),({4},{5}),({6},{7}),({8},{9}),({10},{11}),({12},{13}),({14},{15})".format(x,y , x,h, i+x,h-(y-h), x+i+i,h-(y-h), x+(3*i),h ,x+(3*i),y, x+i+i,y+j, i+x,y+j))
+# print("({0},{1}),({2},{3}),({4},{5}),({6},{7}),({8},{9}),({10},{11})".format(i,j,i+x,y-j,i+x+x,y-j,i+(3*x),j,i+x+x,y+j,i+x,y+j))
+
+# def benchmark_data():
 
 if __name__=='__main__':
 
     # optional pixels argument
+    script_start = time.time()
     parser = argparse.ArgumentParser()
     parser.add_argument('pixels', nargs='?', default=15)
     arg = parser.parse_args()
 
-    dataset = create_data(arg.pixels)
+    dataset = create_data(int(arg.pixels))
 
     with open('data.pickle','wb') as f:
         pickle.dump(dataset,f)
+
+    print("script finished in {} seconds".format(time.time() - script_start))

@@ -7,6 +7,10 @@ import math
 import sys
 import time
 import io
+import importlib
+import os
+
+
         
 class graphics_factory(object):
     
@@ -340,6 +344,11 @@ def parse_file():
     # function parses input file to determine proper parameters
 
     f = open("input.txt","r")
+    # dir = os.path.dirname(bpy.data.filepath)
+    # if not dir in sys.path:
+        # sys.path.append(dir )
+    # import knn
+    # from skimage.feature import canny
     
     num_years = f.readline()
     tuples_def = f.readline()
@@ -347,33 +356,39 @@ def parse_file():
     tuples_def = ''.join(trye)
     num_cultures = f.readline()
     script = f.readline()
+    type_of_ml = f.readline()
     years_per_frame = f.readline()
     
     script = script.split()
+    ml = type_of_ml.split()
     tuple_names = [x.strip() for x in tuples_def.split(',')]
     cultures = int(num_cultures.split(' ', 1)[1])
     years = int(num_years.split(' ', 1)[1])
     year_multiple = int(years_per_frame.split(': ',1)[1])
     
     f.close()
-    return years,tuple_names,cultures,script, year_multiple
+    return years,tuple_names,cultures,script, year_multiple, ml
 
 if __name__=="__main__":
     
     # benchmark script total time
+    
     script_start = time.time()
     # make sure screen is cleared from last simulation
     clear_screen()
     clear_heirarchy()
     scene = bpy.context.scene
 
-    years,tuple_names,cultures,end_script,years_per_frame = parse_file()
+    years,tuple_names,cultures,end_script,years_per_frame,ml = parse_file()
     
     tuples = len(tuple_names)
     script = ["python3", "google-ngrams/getngrams.py"]
+    type_of_ml = ["python3"]
+    type_of_ml.extend(ml)
     script.extend(end_script)
     
     p = Popen(script, stdout=PIPE, bufsize=1, universal_newlines=True)
+    run_ml = Popen(type_of_ml,stdout=PIPE,bufsize=1,universal_newlines=True)
 
     scene.frame_start = 0
     rounded_year = years - (years % 20)
@@ -417,10 +432,11 @@ if __name__=="__main__":
         # move next 10 frames forward - Blender will figure out what to do between this time
         number_of_frame += 5
 
-
     # bpy.ops.wm.save_as_mainfile(filepath = '~/Documents/CGS/oop-blender-demo.blend')
     print("script finished in {} seconds".format(time.time() - script_start))
 
+    for line in run_ml.stdout:
+        print(line)
 # uncomment this if you want to see benchmark graph from n grams data
 
     # print("opening benchmark graph")
