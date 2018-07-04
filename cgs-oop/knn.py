@@ -101,18 +101,20 @@ def getAccuracy(testSet, predictions):
                     correct += 1
     return (correct/float(len(testSet))) * 100.0
 	
-if __name__=='__main__':
+# if __name__=='__main__':
+
+def main(classify=True, k = 6, split = 0.67):
 
     # optional arguments for how many neighbors you want to poll and what test/train split you want
-    parser = argparse.ArgumentParser()
-    parser.add_argument('k', nargs='?', default=6)
-    parser.add_argument('-c', action='store_true')
-    parser.add_argument('split', nargs='?', default=0.67)
-    arg = parser.parse_args()
-    print(arg)
-    split = float(arg.split)
-    k = arg.k
-    classify = arg.c
+    # parser = argparse.ArgumentParser()
+    # parser.add_argument('k', nargs='?', default=6)
+    # parser.add_argument('-c', action='store_true')
+    # parser.add_argument('split', nargs='?', default=0.67)
+    # arg = parser.parse_args()
+    # print(arg)
+    # split = float(arg.split)
+    # k = arg.k
+    # classify = arg.c
 
     trainingSet=[]
     testSet=[]
@@ -138,3 +140,6 @@ if __name__=='__main__':
     accuracy = getAccuracy(testSet, predictions)
     print('Accuracy: ' + repr(accuracy) + '%')
 
+
+if __name__ =='__main__':
+    main()
