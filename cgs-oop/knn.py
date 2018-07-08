@@ -6,6 +6,9 @@ import argparse
 import numpy
 import pickle
 import sys
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.pyplot as plt
+import numpy as np
 
 def loadDataset(filename, split, trainingSet=[] , testSet=[]):
 # Function to load dataset and split training and testing data
@@ -60,7 +63,7 @@ def getResponse(neighbors):
 # neighbors: list of neighbors to testInstance
     classVotes = {}
     for x in range(len(neighbors)):
-        response = neighbors[x][-1]
+        response = neighbors[x][1]
         if response in classVotes:
             classVotes[response] += 1
         else:
@@ -73,7 +76,7 @@ def getContinuumResponse(neighbors):
 
     summed = 0
     for x in range(len(neighbors)):
-        response = neighbors[x][-1]
+        response = neighbors[x][1]
         if response == 'Hexagon':
             val = 0.6
         elif response == 'Rectangle':
@@ -81,7 +84,7 @@ def getContinuumResponse(neighbors):
         elif response == 'Octagon':
             val = 0.4
         else:
-            val = -1
+            val = -0.3
         summed += val
 
     if summed < 0:
@@ -97,13 +100,28 @@ def getAccuracy(testSet, predictions):
 # predictions: what algorithm predicted
     correct = 0
     for x in range(len(testSet)):
-            if testSet[x][-1] == predictions[x]:
+            if testSet[x][1] == predictions[x]:
                     correct += 1
     return (correct/float(len(testSet))) * 100.0
 	
-# if __name__=='__main__':
+def benchmark_data(plot_data, predictions):
 
-def main(classify=True, k = 6, split = 0.67):
+    fig = plt.figure()
+    N=100
+    ax = fig.add_subplot(1, 1, 1)
+    data  = np.random.random((N, 7))
+
+    x = [data_point for data_point in predictions]
+    y =[each_color[2] for each_color in plot_data]
+
+    points = data[:,2:4]
+# color is the length of each vector in `points`
+    color = np.sqrt((points**2).sum(axis = 1))/np.sqrt(2.0)
+    rgb = plt.get_cmap('summer')(color)
+    ax.scatter(x, y, color = rgb)
+    plt.show()
+
+def main(classify=False, k = 6, split = 0.67):
 
     # optional arguments for how many neighbors you want to poll and what test/train split you want
     # parser = argparse.ArgumentParser()
@@ -127,37 +145,19 @@ def main(classify=True, k = 6, split = 0.67):
     predictions = []
 
     for x in range(len(testSet)):
-        neighbors = getNeighbors(trainingSet, testSet[x], k)
 
+        neighbors = getNeighbors(trainingSet, testSet[x], k)
         result = getResponse(neighbors)
         if classify == False:
-           continuum = getContinuumResponse(neighbors)
-           print('actual=' + repr(testSet[x][-1])+ 'continuum val= ' +repr(continuum)) 
+            continuum = getContinuumResponse(neighbors)
+            print('actual=' + repr(testSet[x][1])+ ', continuum val= ' +repr(continuum)) 
         else:
-           print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][-1]))
+            print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][1]))
         predictions.append(result)
 
     accuracy = getAccuracy(testSet, predictions)
-    benchmark_data(testSet)
+    benchmark_data(testSet,predictions)
     print('Accuracy: ' + repr(accuracy) + '%')
-
-
-def benchmark_data(plot_data):
-
-    fig = plt.figure()
-    N=100
-    ax = fig.add_subplot(1, 1, 1)
-    data  = np.random.random((N, 7))
-
-    x = [data_point[1] for data_point in plot_data]
-    y =[each_color[2] for each_color in plot_data]
-
-    points = data[:,2:4]
-# color is the length of each vector in `points`
-    color = np.sqrt((points**2).sum(axis = 1))/np.sqrt(2.0)
-    rgb = plt.get_cmap('summer')(color)
-    ax.scatter(x, y, color = rgb)
-    plt.show()
 
 if __name__ =='__main__':
     main()
