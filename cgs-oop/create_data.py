@@ -65,20 +65,26 @@ def create_data(pixels):
 # print("({0},{1}),({2},{3}),({4},{5}),({6},{7}),({8},{9}),({10},{11})".format(i,j,i+x,y-j,i+x+x,y-j,i+(3*x),j,i+x+x,y+j,i+x,y+j))
 
 def benchmark_data(plot_data):
-
+    
     fig = plt.figure()
     N=100
     ax = fig.add_subplot(1, 1, 1)
     data  = np.random.random((N, 7))
 
     x = [data_point[1] for data_point in plot_data]
-    y =[each_color[2] for each_color in plot_data]
+    y =[data_point[2] for data_point in plot_data]
+    x_vals = ["Circle","Octagon","Hexagon","Rectangle"]
 
     points = data[:,2:4]
-# color is the length of each vector in `points`
+    # color is the length of each vector in `points` color = np.sqrt((points**2).sum(axis = 1))/np.sqrt(2.0)
     color = np.sqrt((points**2).sum(axis = 1))/np.sqrt(2.0)
     rgb = plt.get_cmap('summer')(color)
+
+    # plt.xticks(range(len(x_vals)),x_vals)
+    plt.xlabel("Polygon")
+    plt.ylabel("RGB Color Value")
     ax.scatter(x, y, color = rgb)
+
     plt.show()
 
 if __name__=='__main__':

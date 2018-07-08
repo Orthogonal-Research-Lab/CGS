@@ -111,14 +111,21 @@ def benchmark_data(plot_data, predictions):
     ax = fig.add_subplot(1, 1, 1)
     data  = np.random.random((N, 7))
 
-    x = [data_point for data_point in predictions]
+    x = [data_point[1] for data_point in predictions]
+    x_vals = ["Rectangle","Hexagon","Octagon","Circle"]
     y =[each_color[2] for each_color in plot_data]
 
     points = data[:,2:4]
-# color is the length of each vector in `points`
+    # color is the length of each vector in `points`
     color = np.sqrt((points**2).sum(axis = 1))/np.sqrt(2.0)
     rgb = plt.get_cmap('summer')(color)
+
     ax.scatter(x, y, color = rgb)
+    plt.xticks(range(len(x_vals)),x_vals)
+
+    plt.xlabel("Polygon")
+    plt.ylabel("RGB Color Value")
+
     plt.show()
 
 def main(classify=False, k = 6, split = 0.67):
@@ -142,7 +149,8 @@ def main(classify=False, k = 6, split = 0.67):
     print('Test set: ' + repr(len(testSet)))
 
     # generate predictions
-    predictions = []
+    classified_predictions = []
+    continuum_predictions = []
 
     for x in range(len(testSet)):
 
@@ -153,10 +161,12 @@ def main(classify=False, k = 6, split = 0.67):
             print('actual=' + repr(testSet[x][1])+ ', continuum val= ' +repr(continuum)) 
         else:
             print('> predicted=' + repr(result) + ', actual=' + repr(testSet[x][1]))
-        predictions.append(result)
 
-    accuracy = getAccuracy(testSet, predictions)
-    benchmark_data(testSet,predictions)
+        classified_predictions.append(result)
+        continuum_predictions.append(continuum)
+
+    accuracy = getAccuracy(testSet, classified_predictions)
+    benchmark_data(testSet,continuum_predictions)
     print('Accuracy: ' + repr(accuracy) + '%')
 
 if __name__ =='__main__':
