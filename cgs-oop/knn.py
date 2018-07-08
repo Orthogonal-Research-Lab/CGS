@@ -111,7 +111,8 @@ def benchmark_data(plot_data, predictions):
     ax = fig.add_subplot(1, 1, 1)
     data  = np.random.random((N, 7))
 
-    x = [data_point[1] for data_point in plot_data]
+    x = [data_point for data_point in predictions]
+    print(x)
     y =[data_point[2] for data_point in plot_data]
     x_vals = ["Circle","Octagon","Hexagon","Rectangle"]
 
@@ -120,9 +121,10 @@ def benchmark_data(plot_data, predictions):
     color = np.sqrt((points**2).sum(axis = 1))/np.sqrt(2.0)
     rgb = plt.get_cmap('summer')(color)
 
-    # plt.xticks(range(len(x_vals)),x_vals)
+    plt.xticks([0,0.4,0.6,1.0],x_vals)
     plt.xlabel("Polygon")
     plt.ylabel("RGB Color Value")
+    plt.title("Predicted results on continuum")
     ax.scatter(x, y, color = rgb)
 
     plt.show()

@@ -71,7 +71,17 @@ def benchmark_data(plot_data):
     ax = fig.add_subplot(1, 1, 1)
     data  = np.random.random((N, 7))
 
-    x = [data_point[1] for data_point in plot_data]
+    x = []
+    for data_point in plot_data:
+        if data_point[1]=="Circle":
+            x.append(0)
+        if data_point[1]=="Octagon":
+            x.append(0.4)
+        if data_point[1]=="Hexagon":
+            x.append(0.6)
+        if data_point[1]=="Rectangle":
+            x.append(1.0)
+
     y =[data_point[2] for data_point in plot_data]
     x_vals = ["Circle","Octagon","Hexagon","Rectangle"]
 
@@ -80,7 +90,7 @@ def benchmark_data(plot_data):
     color = np.sqrt((points**2).sum(axis = 1))/np.sqrt(2.0)
     rgb = plt.get_cmap('summer')(color)
 
-    # plt.xticks(range(len(x_vals)),x_vals)
+    plt.xticks([0,0.4,0.6,1.0],x_vals)
     plt.xlabel("Polygon")
     plt.ylabel("RGB Color Value")
     ax.scatter(x, y, color = rgb)
@@ -97,8 +107,8 @@ if __name__=='__main__':
 
     dataset = create_data(int(arg.pixels))
 # 
-    # with open('data.pickle','wb') as f:
-        # pickle.dump(dataset,f)
+    with open('data.pickle','wb') as f:
+        pickle.dump(dataset,f)
 
     benchmark_data(dataset)
 
