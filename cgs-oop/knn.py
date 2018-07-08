@@ -138,8 +138,26 @@ def main(classify=True, k = 6, split = 0.67):
         predictions.append(result)
 
     accuracy = getAccuracy(testSet, predictions)
+    benchmark_data(testSet)
     print('Accuracy: ' + repr(accuracy) + '%')
 
+
+def benchmark_data(plot_data):
+
+    fig = plt.figure()
+    N=100
+    ax = fig.add_subplot(1, 1, 1)
+    data  = np.random.random((N, 7))
+
+    x = [data_point[1] for data_point in plot_data]
+    y =[each_color[2] for each_color in plot_data]
+
+    points = data[:,2:4]
+# color is the length of each vector in `points`
+    color = np.sqrt((points**2).sum(axis = 1))/np.sqrt(2.0)
+    rgb = plt.get_cmap('summer')(color)
+    ax.scatter(x, y, color = rgb)
+    plt.show()
 
 if __name__ =='__main__':
     main()
