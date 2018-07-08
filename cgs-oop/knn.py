@@ -73,19 +73,12 @@ def getResponse(neighbors):
 
 
 def getContinuumResponse(neighbors):
+    key = {"Circle":-0.3, "Octagon":0.4,"Hexagon":0.6,"Rectangle":1}
 
     summed = 0
     for x in range(len(neighbors)):
         response = neighbors[x][1]
-        if response == 'Hexagon':
-            val = 0.6
-        elif response == 'Rectangle':
-            val = 1
-        elif response == 'Octagon':
-            val = 0.4
-        else:
-            val = -0.3
-        summed += val
+        summed += key[response]
 
     if summed < 0:
         summed = 0
