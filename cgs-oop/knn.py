@@ -112,7 +112,6 @@ def benchmark_data(plot_data, predictions):
     data  = np.random.random((N, 7))
 
     x = [data_point for data_point in predictions]
-    print(x)
     y =[data_point[2] for data_point in plot_data]
     x_vals = ["Circle","Octagon","Hexagon","Rectangle"]
 

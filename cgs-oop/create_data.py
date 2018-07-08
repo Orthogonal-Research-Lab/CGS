@@ -64,24 +64,14 @@ def create_data(pixels):
 # print("({0},{1}),({2},{3}),({4},{5}),({6},{7}),({8},{9}),({10},{11}),({12},{13}),({14},{15})".format(x,y , x,h, i+x,h-(y-h), x+i+i,h-(y-h), x+(3*i),h ,x+(3*i),y, x+i+i,y+j, i+x,y+j))
 # print("({0},{1}),({2},{3}),({4},{5}),({6},{7}),({8},{9}),({10},{11})".format(i,j,i+x,y-j,i+x+x,y-j,i+(3*x),j,i+x+x,y+j,i+x,y+j))
 
-def benchmark_data(plot_data):
+def benchmark_data(plot_data,key):
     
     fig = plt.figure()
     N=100
     ax = fig.add_subplot(1, 1, 1)
     data  = np.random.random((N, 7))
 
-    x = []
-    for data_point in plot_data:
-        if data_point[1]=="Circle":
-            x.append(0)
-        if data_point[1]=="Octagon":
-            x.append(0.4)
-        if data_point[1]=="Hexagon":
-            x.append(0.6)
-        if data_point[1]=="Rectangle":
-            x.append(1.0)
-
+    x =[key[data_point[1]] for data_point in plot_data]
     y =[data_point[2] for data_point in plot_data]
     x_vals = ["Circle","Octagon","Hexagon","Rectangle"]
 
@@ -106,10 +96,12 @@ if __name__=='__main__':
     arg = parser.parse_args()
 
     dataset = create_data(int(arg.pixels))
-# 
+ 
     with open('data.pickle','wb') as f:
         pickle.dump(dataset,f)
 
-    benchmark_data(dataset)
+    key = {"Circle":0, "Octagon":0.4,"Hexagon":0.6,"Rectangle":1}
+
+    benchmark_data(dataset,key)
 
 print("script finished in {} seconds".format(time.time() - script_start))
