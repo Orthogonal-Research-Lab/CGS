@@ -11,7 +11,6 @@ import importlib
 import os
 
 
-        
 class graphics_factory(object):
     
     # this method creates everything to be displayed
