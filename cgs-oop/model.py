@@ -384,11 +384,15 @@ if __name__=="__main__":
     script = ["python3", "google-ngrams/getngrams.py"]
     type_of_ml = ["python3"]
     type_of_ml.extend(ml)
-    script.extend(end_script)
+    if(end_script[0]!= "None"):
+        script.extend(end_script)
+        p = Popen(script, stdout=PIPE, bufsize=1, universal_newlines=True)
     
-    p = Popen(script, stdout=PIPE, bufsize=1, universal_newlines=True)
     if ml[0]=='knn.py':
         Popen(["python3", "create_data.py"],stdout=None)
+    else:
+        type_of_ml.extend([str(years)])
+        print(type_of_ml)
 
     run_ml = Popen(type_of_ml,stdout=PIPE,bufsize=1,universal_newlines=True)
 

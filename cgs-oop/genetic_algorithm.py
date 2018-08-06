@@ -1,4 +1,5 @@
 import random
+import sys
 import time
 from create_random_string import get_random_word
 import operator
@@ -121,7 +122,7 @@ class Evolution():
 
         ind.set_word(new_word)
         
-def main():
+def main(num_years = 1000):
     # CXPB  is the probability with which two individuals
     #       are crossed
     #
@@ -146,7 +147,7 @@ def main():
     print("evaluated {} individuals".format(len(pop.individuals)))
     list_of_generations = []
         
-    while max(fits) < len(pop.weight)+2 and g <1000:
+    while max(fits) < len(pop.weight)+2 and g < num_years:
         # A new generation
         g = g + 1
 
@@ -222,5 +223,7 @@ def create_csv(gen_data):
     csv.close()
 
 if __name__=='__main__':
-    main()
+    num_years = int(sys.argv[1])
+
+    main(num_years)
 
