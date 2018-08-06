@@ -19,6 +19,7 @@ class Individual():
         self.fitness_valid = False
         if word_or_not:
             self.word=get_my_word()
+            print(self.word)
         else:
             self.word=get_my_word(False)
 
@@ -122,7 +123,7 @@ class Evolution():
 
         ind.set_word(new_word)
         
-def main(num_years = 1000):
+def main(num_years = 1000,tuple_name="hot"):
     # CXPB  is the probability with which two individuals
     #       are crossed
     #
@@ -132,7 +133,7 @@ def main(num_years = 1000):
     # Variable keeping track of the number of generations
     g = 0
 
-    tuple1 = "hot"
+    tuple1 = tuple_name
     pop = Population(20,tuple1)
     evolve = Evolution()
 
@@ -224,6 +225,7 @@ def create_csv(gen_data):
 
 if __name__=='__main__':
     num_years = int(sys.argv[1])
+    tuple_name = (sys.argv[2])
 
-    main(num_years)
+    main(num_years,tuple_name)
 

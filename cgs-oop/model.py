@@ -392,7 +392,7 @@ if __name__=="__main__":
         Popen(["python3", "create_data.py"],stdout=None)
     else:
         type_of_ml.extend([str(years)])
-        print(type_of_ml)
+        type_of_ml.extend(tuple_names[0])
 
     run_ml = Popen(type_of_ml,stdout=PIPE,bufsize=1,universal_newlines=True)
 
