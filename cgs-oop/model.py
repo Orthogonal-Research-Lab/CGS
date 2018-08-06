@@ -339,8 +339,15 @@ def clear_heirarchy():
         if block.users == 0:
             bpy.data.images.remove(block)
 
-def parse_file():   
+def parse_file(): 
     # function parses input file to determine proper parameters
+    # outputs:
+    # years (int) - number of years for simulation
+    # tuple names (list of strings) - strings of tuple names
+    # cultures (int) - number of cultures
+    # script (string pointing to file) - file that we call for google ngrams
+    # year multiple(int) - how much one frame maps to years
+    # ml(string pointing to file) - decides which file to use to perform ml
 
     f = open("input.txt","r")
     # dir = os.path.dirname(bpy.data.filepath)
