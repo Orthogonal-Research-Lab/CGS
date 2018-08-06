@@ -3,7 +3,6 @@ import math
 import operator
 from skimage.feature import canny
 import argparse
-import numpy
 import pickle
 import sys
 from mpl_toolkits.mplot3d import Axes3D

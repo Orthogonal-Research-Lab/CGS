@@ -1,5 +1,4 @@
 import PIL.ImageDraw as ImageDraw,PIL.Image as Image, PIL.ImageShow as ImageShow 
-import numpy
 import sys
 import pickle
 import random
