@@ -438,20 +438,8 @@ if __name__=="__main__":
         # move next 10 frames forward - Blender will figure out what to do between this time
         number_of_frame += 5
 
-    # bpy.ops.wm.save_as_mainfile(filepath = '~/Documents/CGS/oop-blender-demo.blend')
     print("script finished in {} seconds".format(time.time() - script_start))
 
     for line in run_ml.stdout:
         print(line)
-# uncomment this if you want to see benchmark graph from n grams data
-
-    # print("opening benchmark graph")
-    # for line in p.stdout:
-        # if "Data" in line:
-            # csv = line.split()
-            # csv = csv[-1]
-#             
-    # csv=csv.replace(".csv",".png")
-    # run(["open", csv])
-    # print("finished everything in {}".format(time.time() - script_start))
 

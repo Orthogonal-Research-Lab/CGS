@@ -1,5 +1,5 @@
 years: 300
-Check, soft, cold
+hot, soft, cold
 cultures: 5 
 None
 genetic_algorithm.py
