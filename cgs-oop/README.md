@@ -1,9 +1,5 @@
+Installation
 
-to run as of right now you need to 
-
-1.) open oop-blender-demo
-2.) adjust input.txt file as you deem fit
-3.) run script
-4.) Render--> Render animation
-
-
+1.) pull git repo
+2.) if not already installed, download python3.6 and pip
+3.) run build.sh by typing ./build.sh into terminal - make sure you are in proper directory

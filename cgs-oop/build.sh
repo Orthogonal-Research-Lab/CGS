@@ -12,3 +12,8 @@ pip3 install deap
 echo "DOWNLOADING NLTK CORPUS OF WORDS"
 python3 download_nltk.py
 echo "DOWNLOADED NLTK WORDS"
+
+echo "CREATING ALIAS TO USE BLENDER"
+touch ~/.bash_profile
+echo "alias blender=/Applications/Blender/blender.app/Contents/MacOS/blender" >> ~/.bash_profile
+
