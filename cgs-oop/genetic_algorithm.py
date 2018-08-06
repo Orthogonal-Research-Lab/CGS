@@ -19,7 +19,6 @@ class Individual():
         self.fitness_valid = False
         if word_or_not:
             self.word=get_my_word()
-            print(self.word)
         else:
             self.word=get_my_word(False)
 
@@ -194,7 +193,6 @@ def main(num_years = 1000,tuple_name="hot"):
         sum2 = sum(x*x for x in fits)
         std = abs(sum2 / length - mean**2)**0.5
         
-        print(length)
         print("  Min %s" % min(fits))
         print("  Max %s" % max(fits))
         print("  Avg %s" % mean)

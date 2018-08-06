@@ -10,7 +10,6 @@ import io
 import importlib
 import os
 
-
 class graphics_factory(object):
     
     # this method creates everything to be displayed
@@ -225,7 +224,7 @@ class graphics_factory(object):
                 bpy.ops.object.text_add(location = vertices[i])
                 ob = bpy.context.object
                 ob.data.body = names[i]
-                ob.active_material = mat            
+                ob.active_material = mat
             
 def make_rectangle(radius,origin):
     # helper function that creates rectangles
@@ -301,7 +300,7 @@ def get_slope(vertex1,vertex2):
 def get_triangle_constraints(vertices):
     # calculates where points can go based on kernel outline
     # parameters-
-    # vertices of triangle
+    # vertices of triangles (list of tuple ints)
 
     a = get_slope(vertices[0],vertices[2])
     b = get_slope(vertices[2],vertices[1])
