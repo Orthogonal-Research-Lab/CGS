@@ -360,6 +360,7 @@ def parse_file():
     trye = tuples_def.split(':')
     tuples_def = ''.join(trye)
     num_cultures = f.readline()
+    init_population = f.readline()
     script = f.readline()
     type_of_ml = f.readline()
     years_per_frame = f.readline()
@@ -368,11 +369,12 @@ def parse_file():
     ml = type_of_ml.split()
     tuple_names = [x.strip() for x in tuples_def.split(',')]
     cultures = int(num_cultures.split(' ', 1)[1])
+    init_pop = int(init_population.split(' ', 1)[1])
     years = int(num_years.split(' ', 1)[1])
     year_multiple = int(years_per_frame.split(': ',1)[1])
     
     f.close()
-    return years,tuple_names,cultures,script, year_multiple, ml
+    return years,tuple_names,cultures,init_pop,script, year_multiple, ml
 
 if __name__=="__main__":
     
@@ -384,8 +386,7 @@ if __name__=="__main__":
     clear_heirarchy()
     scene = bpy.context.scene
 
-    years,tuple_names,cultures,end_script,years_per_frame,ml = parse_file()
-    
+    years,tuple_names,cultures,init_pop,end_script,years_per_frame,ml = parse_file()
     tuples = len(tuple_names)
     script = ["python3", "google-ngrams/getngrams.py"]
     type_of_ml = ["python3"]
@@ -394,12 +395,14 @@ if __name__=="__main__":
         script.extend(end_script)
         p = Popen(script, stdout=PIPE, bufsize=1, universal_newlines=True)
     
+    help = ''.join(tuple_names[0])
+    print(help)
     if ml[0]=='knn.py':
         Popen(["python3", "create_data.py"],stdout=None)
     else:
         type_of_ml.extend([str(years)])
-        type_of_ml.extend(tuple_names[0])
-
+        type_of_ml.extend([str(help)])
+        type_of_ml.extend([str(init_pop)])
     run_ml = Popen(type_of_ml,stdout=PIPE,bufsize=1,universal_newlines=True)
 
     scene.frame_start = 0

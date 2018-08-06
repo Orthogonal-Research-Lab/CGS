@@ -122,7 +122,7 @@ class Evolution():
 
         ind.set_word(new_word)
         
-def main(num_years = 1000,tuple_name="hot"):
+def main(num_years = 1000,tuple_name="hot", init_pop=20):
     # CXPB  is the probability with which two individuals
     #       are crossed
     #
@@ -133,7 +133,7 @@ def main(num_years = 1000,tuple_name="hot"):
     g = 0
 
     tuple1 = tuple_name
-    pop = Population(20,tuple1)
+    pop = Population(init_pop,tuple1)
     evolve = Evolution()
 
 
@@ -224,6 +224,7 @@ def create_csv(gen_data):
 if __name__=='__main__':
     num_years = int(sys.argv[1])
     tuple_name = (sys.argv[2])
+    init_pop = int(sys.argv[3])
 
-    main(num_years,tuple_name)
+    main(num_years,tuple_name,init_pop)
 
