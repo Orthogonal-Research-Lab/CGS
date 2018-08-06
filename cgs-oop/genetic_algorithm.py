@@ -11,6 +11,9 @@ toolbox.register("select", tools.selTournament, tournsize=3)
 
 class Individual():
     def __init__(self,get_my_word,word_or_not):
+        #creates an individual 
+        #input: get_my_word- function passed in to create individual
+        #word_or_not- boolean to decide whether real or word or made up one
         self.fitness=0
         self.fitness_valid = False
         if word_or_not:
@@ -29,6 +32,7 @@ class Individual():
         self.word=new_word
 
     def set_fitness(self,fit):
+    # set fitness of each individual
         self.fitness=fit
         if fit > 0:
             self.fitness_valid = True
@@ -49,6 +53,7 @@ class Population():
         self.weight = weight
 
     def selBest(self):
+        # selects most fit individual in the population
         sort_by = operator.attrgetter("fitness")
         self.individuals.sort(key=sort_by, reverse = True)
         return self.individuals[0]
@@ -58,6 +63,8 @@ class Evolution():
         self.weight= weight
 
     def evaluate_fitness(self,ind):
+    # evaluate the fitness of each individual in the population
+    # input: one individual object
         if(ind.rep()==self.weight):
             return len(ind.rep())+2
 
@@ -79,6 +86,9 @@ class Evolution():
         return fitness
 
     def mate(self,parent1,parent2):
+    
+    # generates children from one generation to the next
+    # input: two individual objects
         child1 = ''
         child2 = ''
         child1_length = len(parent1.word)
@@ -199,6 +209,8 @@ def main():
     print("Best individual is %s, %s" % (best_ind.rep(), best_ind.get_fitness()))
 
 def create_csv(gen_data):
+# function that creates and fills table with each generations data
+# input : gen_data - list of tuples that have min, max, avg, and std dev of each generation from max
     down_dir = "generation_files.csv"
     csv = open(down_dir, "w") 
     columnTitleRow = "min, max, avg, std\n"
