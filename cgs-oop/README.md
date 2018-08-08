@@ -1,8 +1,10 @@
-# Installation
+# Installation of your Local Machine
 
 1. pull git repo
-2. if not already installed, download python3.6 and pip
-3. run build.sh by typing ./build.sh into terminal - make sure you are in proper directory
+
+2. if not already installed, download/install python3.6 and pip
+
+3. run _build.sh_ by typing "./build.sh" into terminal. Make sure you are in proper directory.
 
 
 # Input Instructions
@@ -71,10 +73,9 @@ If the input file looks like this
 
 
 # Running Simulation:
-To run the simulation you can do one of two things
+There are two ways to run the simulation
 
-either
-1. type the below line into the command line and hit enter
+1. type the below line into the command line and hit enter.
 
 > oop-blender-demo.blend -P model.py
 
@@ -85,7 +86,7 @@ or
 > open model.py in the text editor in blender  
 > run the script
 
-after these steps you should see the generational output in the terminal as well as a csv file displaying all the data in the folder
+Either way you choose to run the simulation, it should produce the generational output in the terminal as well as a .csv file displaying all the data in the folder.
 
 Now you can run the animation by rendering it in blender. Go to Render--> Render animation. You will now see the animation run.
 
