@@ -1,16 +1,8 @@
 # Installation of your Local Machine
 
-<<<<<<< HEAD
 1. clone git repo
 2. if not already installed, download python3.6 and pip
-3. run build.sh by typing ./build.sh into terminal - make sure you are in proper directory
-=======
-1. pull git repo
-
-2. if not already installed, download/install python3.6 and pip
-
 3. run _build.sh_ by typing "./build.sh" into terminal. Make sure you are in proper directory.
->>>>>>> 6efdeb11a3a7ee528a3994e6b91a1daf07381ab2
 
 
 # Input Instructions
