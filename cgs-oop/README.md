@@ -1,8 +1,8 @@
 # Installation
 
-1.) pull git repo
-2.) if not already installed, download python3.6 and pip
-3.) run build.sh by typing ./build.sh into terminal - make sure you are in proper directory
+1. pull git repo
+2. if not already installed, download python3.6 and pip
+3. run build.sh by typing ./build.sh into terminal - make sure you are in proper directory
 
 
 # Input Instructions
@@ -61,13 +61,13 @@ Line 7 means that each frame in the rendered animation will represent 2 years
 To run the simulation you can do one of two things
 
 either
-1.) type the below line into the command line and hit enter
+1. type the below line into the command line and hit enter
 
 oop-blender-demo.blend -P model.py
 
 or 
 
-2.) open blender
+2. open blender
 -- open model.py in the text editor in blender
 -- run the script
 
