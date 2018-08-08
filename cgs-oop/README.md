@@ -76,3 +76,4 @@ after these steps you should see the generational output in the terminal as well
 
 Now you can run the animation by rendering it in blender. Go to Render--> Render animation. You will now see the animation run.
 
+works on Mac and Linux builds

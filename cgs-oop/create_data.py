@@ -37,19 +37,19 @@ def create_data(pixels):
                         draw_circle.ellipse(((i,j),(x+i,y+j)), fill= "white")
                         if( j-1 > y-j):
                             draw_hex.polygon([(i,j),(i+x,y-j),(i+x+x,y-j),(i+(3*x),j),(i+x+x,y+j),(i+x,y+j)], fill="white")
-                            pix_hex = numpy.array(im_hex)
+                            pix_hex = np.array(im_hex)
                             edges_hex = canny(pix_hex)
                             list_of_training_data.append((edges_hex,'Hexagon',random.random()))
 
                         h = abs(j-y)
                         if(j != y-j and h >2 and h-(y-h) >= 0):
                             draw_oct.polygon([(x,y),(x,h),(i+x,h-(y-h)),(x+i+i,h-(y-h)), (x+(3*i),h),(x+(3*i),y),(x+i+i,y+j),(i+x,y+j)], fill="white")
-                            pix_oct = numpy.array(im_oct)
+                            pix_oct = np.array(im_oct)
                             edges_oct = canny(pix_oct)
                             list_of_training_data.append((edges_oct,'Octagon',random.random()))
 
-                        pix_rect = numpy.array(im_rect)
-                        pix_circle = numpy.array(im_circle)
+                        pix_rect = np.array(im_rect)
+                        pix_circle = np.array(im_circle)
 
                         # algorithm to extract edges from picture
                         edges_rect = canny(pix_rect)
