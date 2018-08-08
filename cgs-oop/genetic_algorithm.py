@@ -206,7 +206,7 @@ def main(num_years = 1000,tuple_name="hot", init_pop=20):
     create_csv(list_of_generations)
     
     best_ind = pop.selBest()
-    print("Best individual is %s, %s" % (best_ind.rep(), best_ind.get_fitness()))
+    print("Best individual is %s, with a fitness of %s" % (best_ind.rep(), best_ind.get_fitness()))
 
 def create_csv(gen_data):
 # function that creates and fills table with each generations data

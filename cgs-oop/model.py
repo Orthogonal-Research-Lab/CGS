@@ -395,13 +395,12 @@ if __name__=="__main__":
         script.extend(end_script)
         p = Popen(script, stdout=PIPE, bufsize=1, universal_newlines=True)
     
-    help = ''.join(tuple_names[0])
-    print(help)
+    tuple_tested = ''.join(tuple_names[0])
     if ml[0]=='knn.py':
         Popen(["python3", "create_data.py"],stdout=None)
     else:
         type_of_ml.extend([str(years)])
-        type_of_ml.extend([str(help)])
+        type_of_ml.extend([str(tuple_tested)])
         type_of_ml.extend([str(init_pop)])
     run_ml = Popen(type_of_ml,stdout=PIPE,bufsize=1,universal_newlines=True)
 
