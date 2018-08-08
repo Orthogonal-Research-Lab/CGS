@@ -1,11 +1,11 @@
-Installation
+# Installation
 
 1.) pull git repo
 2.) if not already installed, download python3.6 and pip
 3.) run build.sh by typing ./build.sh into terminal - make sure you are in proper directory
 
 
-Input Instructions
+# Input Instructions
 
 The Input file has 6 inputs which change the outcome of the simulation. I will go through them line by line
 
@@ -36,7 +36,7 @@ Line 6 is where you input the number of frames you want to represent each genera
 
 
 
-Tutorial:
+# Tutorial:
 
 If the input file looks like this
 
@@ -57,7 +57,7 @@ Line 6 means that you will be using a genetic algorithm for this simulation
 Line 7 means that each frame in the rendered animation will represent 2 years
 
 
-Running Simulation:
+# Running Simulation:
 To run the simulation you can do one of two things
 
 either
