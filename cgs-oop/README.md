@@ -41,19 +41,31 @@ Line 6 is where you input the number of frames you want to represent each genera
 If the input file looks like this
 
 years: 300
+
 hot, soft, cold
+
 cultures: 5 
+
 Population: 50
+
 None
+
 genetic_algorithm.py
+
 years in each frame (1-20): 2
 
 Line 1 means the simulation will simulate 300 years of time
+
 Line 2 means this simulation will be run with a kernel that has 3 tuples- hot, soft, and cold
+
 Line 3 means that this simulation will contain 5 seperate cultures
+
 Line 4 means that the initial population will be 50 individuals
+
 Line 5 means that google-n-grams will not be run during this simulation
+
 Line 6 means that you will be using a genetic algorithm for this simulation
+
 Line 7 means that each frame in the rendered animation will represent 2 years
 
 
