@@ -81,7 +81,7 @@ or
 
 2. open blender
 
-> open model.py in the text editor in blender
+> open model.py in the text editor in blender  
 > run the script
 
 after these steps you should see the generational output in the terminal as well as a csv file displaying all the data in the folder
