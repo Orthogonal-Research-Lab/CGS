@@ -27,6 +27,7 @@ Line 4 is if you want to see the tuples frequency information over time with goo
 Line 5 is where you clarify which type of machine learning you want to use. Right now the possibilities include
 
 > knn.py
+or 
 > genetic_algorithm.py
 
 which you can see in the repo folder
